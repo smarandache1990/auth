@@ -1,7 +1,6 @@
 class User < ApplicationRecord
-    #attr_accessible :email, :password, :password_confirmation
-  
-    attr_accessor :password
+    attr_accessor :email, :password, :password_confirmation
+
     before_save :encrypt_password
     
     validates :password, confirmation: true, on: :create 
@@ -13,18 +12,18 @@ class User < ApplicationRecord
     validates_uniqueness_of :email
     
     def self.authenticate(email, password)
-      user = find_by_email(email)
-      if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+    user = find_by_email(email)
+    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
         user
-      else
+    else
         nil
-      end
+    end
     end
     
     def encrypt_password
-      if password.present?
+    if password.present?
         self.password_salt = BCrypt::Engine.generate_salt
         self.password_hash = BCrypt::Engine.hash_secret(password, password_salt)
-      end
+    end
     end
 end
