@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      redirect_to root_url, :notice => "Signed up!"
+      redirect_to log_in_path, :notice => "Signed up!"
     else
       render :new, status: :unprocessable_entity
     end
@@ -14,6 +14,6 @@ class UsersController < ApplicationController
 
   private
   def user_params
-    params.require(:user).permit(:username, :email, :password, :password_confirmation, :salt, :encrypted_password)
+    params.require(:user).permit(:email, :password, :password_confirmation, :password_hash, :password_salt)
   end
 end
